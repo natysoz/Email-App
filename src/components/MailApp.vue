@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="mail-app">
-            <mail-navigator :status="this.mailStatus" v-on:updateTab="updateTab"/>
+            <mail-navigator :mails="mails" v-on:updateTab="updateTab"/>
             <mail-list v-on:click.native="readingToggle"
                        v-on:delete="requestDeleteMail"
                        v-on:update="updateMailReadStatus"
@@ -25,14 +25,22 @@
 
     export default {
         name: "mailApp",
-        props: ['filter'],
+        props:['filter'],
+        watch: {
+            filter(searchTerm) {
+                this.search = searchTerm;
+            },
+            mails(){
+             return 1;
+            },
+        },
         data() {
             return {
                 search: '',
                 selectedTab: this.$route.params.inbox,
                 mails: [],
                 mailStatus: {},
-                unreadMails: 0,
+                unreadMails: 5,
                 spaceLeft: 0,
                 deletedMails: 0,
                 createNewMailState: false,
@@ -49,13 +57,8 @@
                 });
 
         },
-        watch: {
-            filter(searchTerm) {
-                this.search = searchTerm;
-            }
-        },
-        computed: {
-            filteredMails() {
+            computed:{
+                filteredMails() {
                 if (!this.mails) return;
                 return this.mails.filter(mail => {
                     if (this.selectedTab === 'inbox' || this.selectedTab === 'all') {
@@ -79,7 +82,7 @@
                         this.$router.push('/dashboard/mail/inbox/');
                     }
                 });
-            },
+         },
         },
         methods: {
             updateMailReadStatus(mailID){

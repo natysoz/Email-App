@@ -1,7 +1,7 @@
 <template>
     <nav class="subnav-container emails-container light">
         <div class="burger"><div class="nav-bar-btn"><i class="fas fa-bars"></i></div></div>
-        <div class="section">Appsus 2.0</div>
+        <div @click="goHome" class="section">Appsus 2.0</div>
         <div ></div>
         <div class="nav-bar-btn"><i class="fas fa-adjust"></i></div>
         <div class="nav-bar-btn"><i class="fas fa-th"></i></div>
@@ -12,6 +12,11 @@
 <script>
     export default {
         name: "Navigator",
+        methods:{
+            goHome(){
+                this.$router.push('/')
+            }
+        }
     }
 </script>
 

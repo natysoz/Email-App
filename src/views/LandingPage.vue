@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <h1 class="title">NATYSUS</h1>
+        <h1 class="title">NATYSUS 2.0</h1>
         <h2>Choose App to begin with...</h2>
         <div class="select-project">
 
@@ -38,6 +38,7 @@
 <style scoped>
 
     .title {
+        color: #ffffff;
         font-size: 70px;
     }
 

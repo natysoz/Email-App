@@ -3,7 +3,7 @@
     <div class="emails-container">
         <router-link @click.native="$emit('updateTab','inbox')" class="nav-bar-btn ripple" to="/dashboard/mail/inbox/" active-class="active-mail-tab">
                 <i class="fas fa-inbox nav-bar-icon"></i>
-                Inbox <span class="unread">99</span>
+                Inbox <span class="unread">({{unreadMails}})</span>
         </router-link>
 
         <router-link @click.native="$emit('updateTab','important')" class="nav-bar-btn ripple" to="/dashboard/mail/important/" active-class="active-mail-tab">
@@ -18,8 +18,13 @@
 
         <router-link @click.native="$emit('updateTab','deleted')" class="nav-bar-btn ripple" to="/dashboard/mail/deleted/" active-class="active-mail-tab">
             <i class="fas fa-trash nav-bar-icon"></i>
-            Deleted<span class="unread">99</span>
+            Deleted<span class="unread">({{deletedMails}})</span>
         </router-link>
+
+
+        <div class="space-left">
+            <div>Space left <span>{{mails.length}}</span>/150</div>
+        </div>
 
     </div>
 
@@ -27,18 +32,34 @@
 
 <script>
     export default {
-        name: "Sidebar",
-        props:['unread','deleted'],
+        name: "mail-navigator",
+        props:["mails"],
 
         created() {
             let lastPath = this.$route.params;
             this.$emit('updateTab',lastPath);
         },
+
+        computed:{
+          unreadMails(){
+            return this.mails.filter(mail=>{
+                return !mail.isRead;}).length;
+          },
+
+          deletedMails(){
+                return this.mails.filter(mail=>{
+                    return mail.isDeleted;}).length;
+            },
+
+        },
         data(){
             return{
                 mailStatus:this.status,
+                unread:0,
+                deleted:0,
+                clone:[],
             }
-        }
+        },
     }
 </script>
 
@@ -47,6 +68,13 @@
         list-style: none;
     }
 
+    .space-left{
+        display: flex;
+        flex-direction: column;
+        font-size: 1.1rem;
+        color: white;
+        align-items: center;
+    }
     .emails-container {
 
         background-color: #03a9f4;

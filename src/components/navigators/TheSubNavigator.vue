@@ -39,9 +39,9 @@
 
 <style scoped>
     ::placeholder {
-        font-family: 'Barlow SemiBold', sans-serif;
-        color: #d3d3d3;
-        font-size: 1rem;
+        font-family: 'Barlow', sans-serif;
+        color: #f6f6f6;
+        font-size: 1.1rem;
         line-height: 100%;
     }
 
@@ -52,8 +52,8 @@
 
     .input-area{
         font-size: 1.3rem;
-        cursor: auto;
         color: white;
+        padding-left: 20px;
         border: none;
         width: 200px;
         height: 90%;
@@ -61,6 +61,7 @@
         transition: font-size 0.1s;
     }
     .input-area:hover{
+        color: white;
         cursor: pointer;
     }
 

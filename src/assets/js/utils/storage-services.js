@@ -3,6 +3,7 @@ export default {
     saveToStorage,
     loadFromStorage,
     createMailRandomID,
+    createHSLClrs,
 }
 
 function saveToStorage(key, value) {
@@ -22,4 +23,8 @@ function createMailRandomID(length=15) {
     for (var i = 0; i < length; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
+}
+
+function createHSLClrs(){
+        return 'hsla(' + (Math.random() * 360) + ', 50%, 60%, 10)'; // Hue sat light alpa
 }

@@ -5,6 +5,7 @@ export default {
     getMailStatus,
     pushNewMail,
     deleteMailByID,
+    updateMailStatus,
 }
 
 import storageService from './storage-services';
@@ -40,7 +41,14 @@ function getDeletedMails() {
     return gMails.filter(mail=>mail.isDeleted)
 }
 
-
+function updateMailStatus(mailID){
+    return storageService.loadFromStorage('mails')
+        .then(mails => {
+            var emailIdx = mails.findIndex(email => email._id === mailID);
+            gMails[emailIdx].isRead =true;
+            return storageService.saveToStorage('mails', gMails);
+        });
+}
 
 function deleteMailByID(mailID) {
     return storageService.loadFromStorage('mails')

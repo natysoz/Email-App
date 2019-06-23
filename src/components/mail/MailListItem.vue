@@ -1,16 +1,18 @@
 <template>
 
-    <router-link :to="mail._id" tag="div" class="mail-logo" :class="{ unread: itemWasRead}">
-        <div class="logo flex"
-             :style="{background}">
+    <router-link @click.native="$emit('update',mail._id)"
+                 :to="mail._id" tag="div" class="mail-logo"
+                 :class="{ unread: !mail.isRead}">
+        <div class="logo flex" :style="{background}">
             {{mail.name | first-char}}
         </div>
-
         <div class="mail-info">
             <div class="mail-title">{{mail.name }} <span class="date">{{dateComputed}}</span></div>
             <div>{{mail.subject | snipped}}</div>
         </div>
-        <div class="delete-item" v-on:click.stop.prevent="$emit('delete',mail._id)"><i class="fas fa-trash btn"></i></div>
+        <div class="delete-item"
+             v-on:click.stop.prevent="$emit('delete',mail._id)">
+            <i class="fas fa-trash btn"></i></div>
     </router-link>
 
 </template>
@@ -61,16 +63,18 @@
         font-size: .8rem;
     }
 
-    .delete-item{
+    .delete-item {
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: 1rem;
     }
-    .delete-item:hover{
+
+    .delete-item:hover {
         color: #fbfffc;
 
     }
+
     .unread {
         background-color: #03a9f41c;
         font-weight: 900;

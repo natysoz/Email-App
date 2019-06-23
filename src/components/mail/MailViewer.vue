@@ -35,17 +35,17 @@
 
     export default {
         name: "mailViewer",
-        watch:{
-            '$route' () {
+        watch: {
+            '$route'() {
                 this.mailListItemId = this.$route.params.id;
-                this.selectedMail = this.mails.find(mail=>mail._id===this.mailListItemId);
+                this.selectedMail = this.mails.find(mail => mail._id === this.mailListItemId);
             }
         },
         mounted() {
             mailService.query()
-                .then(mails=>{
+                .then(mails => {
                     this.mails = mails;
-                    this.selectedMail = this.mails.find(mail=>mail._id===this.mailListItemId);
+                    this.selectedMail = this.mails.find(mail => mail._id === this.mailListItemId);
                 });
         },
 
@@ -53,8 +53,8 @@
             return {
                 mails: [],
                 mailListItemId: this.$route.params.id,
-                noMailSelected:false,
-                selectedMail:{},
+                noMailSelected: false,
+                selectedMail: {},
             }
         }
     }
@@ -67,12 +67,14 @@
         background: transparent; /* make scrollbar transparent */
     }
 
-    .overflow{
+    .overflow {
         overflow: auto;
     }
-    .width{
+
+    .width {
         width: 90%;
     }
+
     .mail-card-controller {
         display: flex;
         align-items: center;
@@ -80,7 +82,8 @@
         height: 55px;
         transition: font-size 0.2s ease-out;
     }
-    .mail-card-controller >*{
+
+    .mail-card-controller > * {
         border-radius: 100px;
         height: 100%;
         display: flex;
@@ -95,11 +98,12 @@
         -webkit-box-align: center;
         -ms-flex-align: center;
     }
-    .last{
-             margin-left: auto;
-         }
 
-    .mail-card-controller:not(.btn) > .btn:hover{
+    .last {
+        margin-left: auto;
+    }
+
+    .mail-card-controller:not(.btn) > .btn:hover {
         cursor: pointer;
         font-size: 1.3rem;
         background-color: #ffffff1a;
@@ -119,7 +123,7 @@
 
     .mail-card-head {
         display: grid;
-        grid-template-columns: repeat(3,1fr);
+        grid-template-columns: repeat(3, 1fr);
 
         width: 95%;
         height: 30%;

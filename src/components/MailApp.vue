@@ -2,7 +2,10 @@
     <div>
         <div class="mail-app">
             <mail-navigator :status="this.mailStatus" v-on:updateTab="updateTab"/>
-            <mail-list v-on:click.native="readingToggle" v-on:delete="requestDeleteMail" :mails="filteredMails"/>
+            <mail-list v-on:click.native="readingToggle"
+                       v-on:delete="requestDeleteMail"
+                       v-on:update="updateMailReadStatus"
+                       :mails="filteredMails"/>
             <mail-new-button v-on:create="openNewMail"/>
             <mail-compose v-on:send="sendMailAndClose" v-on:close="closeNewMail" v-if="createNewMailState"/>
             <router-view v-if="!createNewMailState"/>
@@ -79,6 +82,15 @@
             },
         },
         methods: {
+            updateMailReadStatus(mailID){
+                mailService.updateMailStatus(mailID)
+                  .then(() => {
+                    mailService.query()
+                        .then(mails => {
+                            this.mails = mails;
+                        });
+                })
+            },
             requestDeleteMail(mailID) {
                 mailService.deleteMailByID(mailID)
                     .then(() => {

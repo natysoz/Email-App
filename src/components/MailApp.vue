@@ -2,9 +2,12 @@
 
     <div>
         <div class="mail-app">
-            <mail-navigator v-on:updateTab="updateTab"></mail-navigator>
-            <mail-list :mails="filteredMails"></mail-list>
-            <router-view></router-view>
+            <mail-navigator :status="this.mailStatus" v-on:updateTab="updateTab"></mail-navigator>
+            <mail-list v-on:delete="requestDeleteMail" :mails="filteredMails"/>
+            <mail-new-button v-on:create="openNewMail"></mail-new-button>
+            <mail-compose v-on:send="sendMailAndClose" v-on:close="closeNewMail" v-if="createNewMailState"></mail-compose>
+            <router-view v-if="!createNewMailState"></router-view>
+            <mail-empty v-if="!createNewMailState"></mail-empty>
         </div>
     </div>
 
@@ -12,8 +15,11 @@
 
 <script>
     import mailList from './mail/MailList'
+    import mailCompose from './mail/MailNewCompose'
+    import mailNewButton from './mail/MailNewMailButton'
     import mailNavigator from './mail/MailNavigator'
     import mailService from '../assets/js/utils/mail-services'
+    import mailEmpty from './mail/MailViewerEmpty'
 
     export default {
         name: "mailApp",
@@ -22,20 +28,25 @@
                 search: '',
                 selectedTab: this.$route.params.inbox,
                 mails: [],
-                unreadMails:0,
-                spaceLeft:0,
+                mailStatus:{},
+                unreadMails: 0,
+                spaceLeft: 0,
+                deletedMails:0,
+                createNewMailState:false,
             }
         },
-        mounted() {
+        created() {
             this.selectedTab = this.$route.params.inbox;
             mailService.query()
-                .then(mails=>{
+                .then(mails => {
                     this.mails = mails;
+                    this.mailStatus = mailService.getMailStatus();
                 });
+
         },
         computed: {
             filteredMails() {
-                if(!this.mails) return ;
+                if (!this.mails) return;
                 return this.mails.filter(mail => {
                     if (this.selectedTab === 'inbox' || this.selectedTab === 'all') {
                         if (!mail.isDeleted && !mail.isSent) return mail.isDone
@@ -51,20 +62,41 @@
                     }
                 })
             },
-            unrealMailCount(){
-                return 9;
-            }
         },
         methods: {
+            requestDeleteMail(mailID){
+                mailService.deleteMailByID(mailID)
+                    .then(()=>{
+                        mailService.query()
+                            .then(mails => {
+                                this.mails = mails;
+                                console.log(this.mails)
+                            });
+                    })
+            },
+            openNewMail(){
+                this.createNewMailState=true;
+            },
+            closeNewMail(){
+                this.createNewMailState=false;
+            },
+            sendMailAndClose(mail){
+                mailService.pushNewMail(mail);
+                mailService.query()
+                    .then(mails => {
+                        this.mails = mails;
+                        this.mailStatus = mailService.getMailStatus();
+                    });
+                this.createNewMailState=false;
+            },
             updateTab(tab) {
                 if (!tab) return;
                 this.selectedTab = tab;
+                this.unreadMails = mailService.getUnreadMails();
+                this.deletedMails = mailService.getDeletedMails();
             },
         },
-        components: {
-            mailNavigator,
-            mailList,
-        },
+        components: {mailNavigator, mailList, mailNewButton, mailCompose,mailEmpty},
     }
 </script>
 

@@ -1,28 +1,48 @@
 <template>
 
-    <router-link @click="this.$emit('updateReadStatus',this.mail.id)" :to="mail._id" tag="div" class="mail-logo" :class="{ unread: itemWasRead}">
-        <div class="logo flex" :style="{background}">{{mail.name | first-char}}</div>
+    <router-link
+            @click.native="$emit('clicked',mail._id)"
+            :to="mail._id" tag="div" class="mail-logo"
+            :class="{ unread: itemWasRead}">
+
+        <div class="logo flex"
+             :style="{background}">
+            {{mail.name | first-char}}
+        </div>
+
         <div class="mail-info">
-            <div class="mail-title">{{mail.name }} <span class="date">{{mail.sendAt}}</span></div>
+            <div class="mail-title">{{mail.name }} <span class="date">{{dateComputed}}</span></div>
             <div>{{mail.subject | snipped}}</div>
         </div>
+        <div>1</div>
     </router-link>
 
 </template>
 
 <script>
-
     export default {
         name: "MailListItem",
         props: ["mail"],
+        created() {
+            this.itemWasRead = !this.mail.isRead;
+        },
         data() {
             return {
                 background: this.randomColor(),
-                itemWasRead:'',
+                itemWasRead: '',
+                date: '',
             }
         },
-        created() {
-            this.itemWasRead = !this.mail.isRead;
+        computed: {
+            dateComputed() {
+                var date = new Date(this.mail.timestamp);
+                var hour = date.getHours()
+                var mins = date.getMinutes()
+                var day = date.getDay()
+                var month = date.getMonth()
+                var year = date.getFullYear()
+                return this.date = day + '/' + month + '/' + year + ' at ' + hour + ':' + mins;
+            }
         },
         methods: {
             randomColor() {
@@ -44,7 +64,8 @@
         color: #fbfffc;
         font-size: .8rem;
     }
-    .unread{
+
+    .unread {
         background-color: #03a9f41c;
         font-weight: 900;
         color: #b1b1b1;

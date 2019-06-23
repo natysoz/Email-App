@@ -2,8 +2,8 @@
 
     <div class="preview-mails emails-container">
         <div class="mail-container">
-            <div v-for="mail in this.mails" :key="mail._id">
-            <mail-item-preview v-bind:mail="mail"></mail-item-preview>
+            <div v-for="mail in this.mails" :key="mail.name">
+            <mail-list-item v-on:clicked="clicked"  v-bind:mail="mail"></mail-list-item>
             </div>
 
         </div>
@@ -12,11 +12,16 @@
 </template>
 
 <script>
-    import mailItemPreview from './MailListItem'
+    import mailListItem from './MailListItem'
     export default {
         name: "mail-preview",
         props:["mails"],
-        components:{mailItemPreview},
+        methods:{
+            clicked(mailID){
+                this.$emit('delete',mailID)
+            }
+        },
+        components:{mailListItem},
     }
 </script>
 

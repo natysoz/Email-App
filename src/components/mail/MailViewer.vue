@@ -27,21 +27,15 @@
             </div>
 
         </section>
-
-        <no-mail v-if="noMailSelected" class="mail-viewer"></no-mail>
     </section>
 
 </template>
 
 <script>
-    import noMail from './MailViewerEmpty'
     import mailService from '../../assets/js/utils/mail-services'
 
     export default {
         name: "mailViewer",
-        components: {
-            noMail
-        },
         watch:{
             '$route' () {
                 this.mailListItemId = this.$route.params.id;

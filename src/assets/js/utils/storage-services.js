@@ -7,11 +7,12 @@ export default {
 
 function saveToStorage(key, value) {
     localStorage[key] = JSON.stringify(value);
+    return Promise.resolve();
 }
 
-function loadFromStorage(key) {
-    var str = localStorage[key] || 'null';
-    return Promise.resolve(JSON.parse(str));
+function loadFromStorage() {
+    var mails = localStorage.getItem('mails');
+    return Promise.resolve(JSON.parse(mails));
 }
 
 

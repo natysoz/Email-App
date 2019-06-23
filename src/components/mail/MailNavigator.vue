@@ -3,7 +3,7 @@
     <div class="emails-container">
         <router-link @click.native="$emit('updateTab','inbox')" class="nav-bar-btn ripple" to="/dashboard/mail/inbox/" active-class="active-mail-tab">
                 <i class="fas fa-inbox nav-bar-icon"></i>
-                Inbox <span class="unread">({{unreadInbox}})</span>
+                Inbox <span class="unread">99</span>
         </router-link>
 
         <router-link @click.native="$emit('updateTab','important')" class="nav-bar-btn ripple" to="/dashboard/mail/important/" active-class="active-mail-tab">
@@ -18,7 +18,7 @@
 
         <router-link @click.native="$emit('updateTab','deleted')" class="nav-bar-btn ripple" to="/dashboard/mail/deleted/" active-class="active-mail-tab">
             <i class="fas fa-trash nav-bar-icon"></i>
-            Deleted<span class="unread">({{unreadDeleted}})</span>
+            Deleted<span class="unread">99</span>
         </router-link>
 
     </div>
@@ -28,13 +28,16 @@
 <script>
     export default {
         name: "Sidebar",
-        mounted() {
-            let lastPath = this.$route.params.inbox;
+        props:['unread','deleted'],
+
+        created() {
+            let lastPath = this.$route.params;
             this.$emit('updateTab',lastPath);
         },
-        computed:{
-            unreadInbox(){return 10;},
-            unreadDeleted(){return 10;}
+        data(){
+            return{
+                mailStatus:this.status,
+            }
         }
     }
 </script>

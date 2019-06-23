@@ -2,7 +2,7 @@
 
     <div class="preview-mails emails-container">
         <div class="mail-container">
-            <div v-for="mail in this.mails" :key="mail.name">
+            <div v-for="mail in this.mails" :key="mail.id">
             <mail-list-item v-on:delete="deleteMail"  v-bind:mail="mail"></mail-list-item>
             </div>
 
@@ -37,7 +37,6 @@
         overflow: auto;
         background-color: #424242;
         box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
-
 
     }
     .emails-container > * {

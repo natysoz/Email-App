@@ -1,8 +1,8 @@
 <template>
     <section class="header">
-        <main-nav></main-nav>
-        <sub-nav></sub-nav>
-        <router-view></router-view>
+        <main-nav />
+        <sub-nav v-on:filtered="test"/>
+        <router-view v-bind:filter="filter"/>
     </section>
 </template>
 
@@ -16,6 +16,16 @@
         components:{
             mainNav,
             subNav,
+        },
+        data(){
+            return{
+                filter:'',
+            }
+        },
+        methods:{
+            test(got){
+              this.filter = got;
+            },
         },
     }
 

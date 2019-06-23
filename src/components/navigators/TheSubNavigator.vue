@@ -12,24 +12,61 @@
         <router-link to="/dashboard/todo/" active-class="active">
             <div class="section ripple">Todo</div>
         </router-link>
+
+            <label class="section">
+                <input class="input-area" type="text" v-model="search" placeholder="Multi Search here"/>
+            </label>
+
     </nav>
 </template>
 
 <script>
     export default {
         name: "Subnav",
+        watch:{
+          search:function(){
+              this.$emit('filtered',this.search);
+          }
+        },
+        data() {
+            return {
+                search: '',
+            }
+        },
+
     }
 </script>
 
-<style scoped >
+<style scoped>
+    ::placeholder {
+        font-family: 'Barlow SemiBold', sans-serif;
+        color: #d3d3d3;
+        font-size: 1rem;
+        line-height: 100%;
+    }
+
 
     a {
         text-decoration: none;
     }
 
+    .input-area{
+        font-size: 1.3rem;
+        cursor: auto;
+        color: white;
+        border: none;
+        width: 200px;
+        height: 90%;
+        background-color: #03a9f4;
+        transition: font-size 0.1s;
+    }
+    .input-area:hover{
+        cursor: pointer;
+    }
+
     .section {
         display: flex;
-        font-family: Barlow,sans-serif;
+        font-family: Barlow, sans-serif;
         justify-content: center;
         align-items: center;
         width: 100%;
@@ -66,7 +103,7 @@
 
     .emails-container {
         display: grid;
-        grid-template-columns:0.85fr 2.3fr 1fr 0 7fr;
+        grid-template-columns: 1.005fr 2.679fr 1fr 1fr 7fr;
         grid-gap: 0;
     }
 

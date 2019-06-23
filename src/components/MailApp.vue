@@ -1,10 +1,9 @@
 <template>
-
     <div>
         <div class="mail-app">
-            <mail-navigator :status="this.mailStatus" v-on:updateTab="updateTab" />
-            <mail-list v-on:click.native="readingToggle" v-on:delete="requestDeleteMail" :mails="filteredMails" />
-            <mail-new-button v-on:create="openNewMail" />
+            <mail-navigator :status="this.mailStatus" v-on:updateTab="updateTab"/>
+            <mail-list v-on:click.native="readingToggle" v-on:delete="requestDeleteMail" :mails="filteredMails"/>
+            <mail-new-button v-on:create="openNewMail"/>
             <mail-compose v-on:send="sendMailAndClose" v-on:close="closeNewMail" v-if="createNewMailState"/>
             <router-view v-if="!createNewMailState"/>
             <mail-empty v-if="!createNewMailState && !readMode"/>
@@ -23,17 +22,19 @@
 
     export default {
         name: "mailApp",
+        props: ['filter'],
         data() {
             return {
                 search: '',
                 selectedTab: this.$route.params.inbox,
                 mails: [],
-                mailStatus:{},
+                mailStatus: {},
                 unreadMails: 0,
                 spaceLeft: 0,
-                deletedMails:0,
-                createNewMailState:false,
-                readMode:false,
+                deletedMails: 0,
+                createNewMailState: false,
+                readMode: false,
+                filterArray: [],
             }
         },
         created() {
@@ -45,45 +46,65 @@
                 });
 
         },
+        watch: {
+            filter(searchTerm) {
+                this.search = searchTerm;
+            }
+        },
         computed: {
             filteredMails() {
                 if (!this.mails) return;
                 return this.mails.filter(mail => {
                     if (this.selectedTab === 'inbox' || this.selectedTab === 'all') {
-                        if (!mail.isDeleted && !mail.isSent) return mail.isDone
+                        if (!mail.isDeleted && !mail.isSent && mail.isDone) {
+                            return this.checkSearchFilter(mail);
+                        }
                     } else if (this.selectedTab === 'important') {
-                        if (!mail.isDeleted) return mail.isImportant
+                        if (!mail.isDeleted && mail.isImportant) {
+                            return this.checkSearchFilter(mail);
+                        }
                     } else if (this.selectedTab === 'sent') {
-                        if (!mail.isDeleted && !mail.isInbox) return mail.isSent
+                        if (!mail.isDeleted && !mail.isInbox && mail.isSent) {
+                            return this.checkSearchFilter(mail);
+                        }
                     } else if (this.selectedTab === 'deleted') {
-                        return mail.isDeleted
+                        if (mail.isDeleted) {
+                            return this.checkSearchFilter(mail);
+                        }
                     } else {
                         this.selectedTab = 'inbox';
                         this.$router.push('/dashboard/mail/inbox/');
                     }
-                })
+                });
             },
         },
         methods: {
-            requestDeleteMail(mailID){
+            requestDeleteMail(mailID) {
                 mailService.deleteMailByID(mailID)
-                    .then(()=>{
+                    .then(() => {
                         mailService.query()
                             .then(mails => {
                                 this.mails = mails;
                             });
                     })
             },
-            readingToggle(){
-                this.readMode=true;
+            checkSearchFilter(mail) {
+                if (mail.subject.match(this.search) ||
+                    mail.body.match(this.search) ||
+                    mail.name.match(this.search)) {
+                    return mail;
+                }
             },
-            openNewMail(){
-                this.createNewMailState=true;
+            readingToggle() {
+                this.readMode = true;
             },
-            closeNewMail(){
-                this.createNewMailState=false;
+            openNewMail() {
+                this.createNewMailState = true;
             },
-            sendMailAndClose(mail){
+            closeNewMail() {
+                this.createNewMailState = false;
+            },
+            sendMailAndClose(mail) {
                 mailService.pushNewMail(mail);
                 mailService.query()
                     .then(mails => {
@@ -93,7 +114,7 @@
                         this.selectedTab = 'sent';
 
                     });
-                this.createNewMailState=false;
+                this.createNewMailState = false;
             },
             updateTab(tab) {
                 if (!tab) return;
@@ -101,8 +122,10 @@
                 this.unreadMails = mailService.getUnreadMails();
                 this.deletedMails = mailService.getDeletedMails();
             },
+
+
         },
-        components: {mailNavigator, mailList, mailNewButton, mailCompose,mailEmpty},
+        components: {mailNavigator, mailList, mailNewButton, mailCompose, mailEmpty},
     }
 </script>
 

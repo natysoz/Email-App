@@ -1,4 +1,4 @@
-# vuebooks
+# sprint 3
 
 ## Project setup
 ```

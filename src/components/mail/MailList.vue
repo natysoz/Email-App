@@ -3,7 +3,7 @@
     <div class="preview-mails emails-container">
         <div class="mail-container">
             <div v-for="mail in this.mails" :key="mail.name">
-            <mail-list-item v-on:clicked="clicked"  v-bind:mail="mail"></mail-list-item>
+            <mail-list-item v-on:delete="deleteMail"  v-bind:mail="mail"></mail-list-item>
             </div>
 
         </div>
@@ -17,7 +17,7 @@
         name: "mail-preview",
         props:["mails"],
         methods:{
-            clicked(mailID){
+            deleteMail(mailID){
                 this.$emit('delete',mailID)
             }
         },

@@ -47,7 +47,7 @@ function deleteMailByID(mailID) {
         .then(mails => {
             var emailIdx = mails.findIndex(email => email._id === mailID);
             gMails.splice(emailIdx, 1);
-            console.log('to delete ',mailID,'Found idx of this ID',emailIdx);
+            //console.log('to delete ',mailID,'Found idx of this ID',emailIdx);
             return storageService.saveToStorage('mails', gMails);
         });
 }

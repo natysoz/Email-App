@@ -20,7 +20,7 @@
         },
         computed:{
             sectionTitle(){
-                return 'section';
+                return this.section = (this.$route.params.inbox).toUpperCase();
             }
         }
     }

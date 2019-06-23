@@ -4,13 +4,13 @@
         <h2>Choose App to begin with...</h2>
         <div class="select-project">
 
-            <router-link class="email-character" to="/dashboard/mail/inbox">
+            <router-link class="email-character" to="/dashboard/mail/inbox/">
                 <mail-character/>
                 <span class="replies">Click me im the best!</span>
                 <span class="comment">Yheaaa!</span>
             </router-link>
 
-            <router-link class="email-character" to="/dashboard/todo">
+            <router-link class="email-character" to="/dashboard/todo/">
                 <todo-character/>
                 <span class="replies">No No Click me!!</span>
                 <span class="comment">Let's Go!</span>

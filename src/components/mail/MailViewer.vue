@@ -28,7 +28,6 @@
 
         </section>
     </section>
-
 </template>
 
 <script>

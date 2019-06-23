@@ -2,12 +2,12 @@
 
     <div>
         <div class="mail-app">
-            <mail-navigator :status="this.mailStatus" v-on:updateTab="updateTab"></mail-navigator>
-            <mail-list v-on:delete="requestDeleteMail" :mails="filteredMails"/>
-            <mail-new-button v-on:create="openNewMail"></mail-new-button>
-            <mail-compose v-on:send="sendMailAndClose" v-on:close="closeNewMail" v-if="createNewMailState"></mail-compose>
-            <router-view v-if="!createNewMailState"></router-view>
-            <mail-empty v-if="!createNewMailState"></mail-empty>
+            <mail-navigator :status="this.mailStatus" v-on:updateTab="updateTab" />
+            <mail-list v-on:click.native="readingToggle" v-on:delete="requestDeleteMail" :mails="filteredMails" />
+            <mail-new-button v-on:create="openNewMail" />
+            <mail-compose v-on:send="sendMailAndClose" v-on:close="closeNewMail" v-if="createNewMailState"/>
+            <router-view v-if="!createNewMailState"/>
+            <mail-empty v-if="!createNewMailState && !readMode"/>
         </div>
     </div>
 
@@ -33,6 +33,7 @@
                 spaceLeft: 0,
                 deletedMails:0,
                 createNewMailState:false,
+                readMode:false,
             }
         },
         created() {
@@ -70,9 +71,11 @@
                         mailService.query()
                             .then(mails => {
                                 this.mails = mails;
-                                console.log(this.mails)
                             });
                     })
+            },
+            readingToggle(){
+                this.readMode=true;
             },
             openNewMail(){
                 this.createNewMailState=true;
@@ -86,6 +89,9 @@
                     .then(mails => {
                         this.mails = mails;
                         this.mailStatus = mailService.getMailStatus();
+                        this.$router.push('/dashboard/mail/sent/');
+                        this.selectedTab = 'sent';
+
                     });
                 this.createNewMailState=false;
             },

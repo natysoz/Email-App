@@ -8,7 +8,7 @@ import './assets/fonts/all.min.css';
 
 
 Vue.filter('to-uppercase', value => value.toUpperCase());
-Vue.filter('snipped', value => value.slice(0, 70) + '...');
+Vue.filter('snipped', value => value.slice(0, 50) + '...');
 Vue.filter('first-char', value => value.slice(0, 1));
 
 new Vue({

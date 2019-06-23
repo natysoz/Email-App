@@ -18,7 +18,7 @@
 
 <style>
     #app {
-        color: #ffffff;
+        color: #d5d5d5;
         font-family: 'Barlow ExtraLight', sans-serif;
         font-weight: 200;
         -webkit-font-smoothing: antialiased;

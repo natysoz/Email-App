@@ -36,8 +36,8 @@
                 var date = new Date(this.mail.timestamp);
                 var hour = date.getHours()
                 var mins = date.getMinutes()
-                var day = date.getDay()
-                var month = date.getMonth()
+                var day = date.getDate()
+                var month = date.getMonth()+1;
                 var year = date.getFullYear()
                 return this.date = day + '/' + month + '/' + year + ' at ' + hour + ':' + mins;
             }

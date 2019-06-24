@@ -6,9 +6,9 @@
             </div>
             <div class="mail-item-card">
                 <div class="mail-card-head">
-                        <div class="logo flex" :style="{background}">
-                            {{selectedMail.name | first-char}}
-                        </div>
+                    <div class="logo flex">
+                        {{mailFirstChar}}
+                    </div>
                     <div>{{ selectedMail.name}}</div>
                     <div>{{ selectedMail.sentfrom}}</div>
                     <div>{{ dateComputed(selectedMail.timestamp)}}</div>
@@ -19,8 +19,12 @@
                 </div>
 
                 <div class="mail-card-controller">
-                    <div class="btn"><i class="fas fa-reply "></i></div>
+                    <div @click.stop="" class="btn"><i class="fas fa-reply "></i></div>
                     <div class="btn"><i class="fas fa-arrow-right "></i></div>
+
+                    <div v-if="selectedMail.isImportant" class="btn last"><i class="far fa-heart"></i></div>
+                    <div v-else class="btn last"><i class="fas fa-heart btn"></i></div>
+
                 </div>
             </div>
             <div :key="replay.name" v-for="replay in selectedMail.replays">
@@ -29,22 +33,20 @@
                 </div>
                 <div class="mail-item-card">
                     <div class="mail-card-head">
-                        <div class="replay-logo flex" :style="{background}">
-                            {{replay.name | first-char}}
-                        </div>
+                        <div class="replay-logo flex">{{replay.name.charAt(0)}}</div>
                         <div>{{ replay.name}}</div>
                         <div>{{ replay.sentfrom}}</div>
                         <div>{{ dateComputed(replay.timestamp)}}</div>
                     </div>
 
                     <div class="mail-card-body">
+                        <div>Replay:</div>
                         <p>{{ replay.body}}</p>
                     </div>
 
                     <div class="mail-card-controller">
                         <div class="btn"><i class="fas fa-reply "></i></div>
                         <div class="btn"><i class="fas fa-arrow-right "></i></div>
-
                         <div class="btn last"><i class="fas fa-trash btn"></i></div>
                     </div>
                 </div>
@@ -53,32 +55,43 @@
         </section>
     </section>
 </template>
+<!--TODO Split the 2 Components !-->
+
 
 <script>
     import mailService from '../../assets/js/utils/mail-services'
 
     export default {
         name: "mailViewer",
-        watch: {
-            '$route'() {
-                this.mailListItemId = this.$route.params.id;
-                this.selectedMail = this.mails.find(mail => mail._id === this.mailListItemId);
-            }
-        },
-        mounted() {
+        created() {
             mailService.query()
                 .then(mails => {
                     this.mails = mails;
                     this.selectedMail = this.mails.find(mail => mail._id === this.mailListItemId);
                 });
         },
-        methods:{
+        computed: {
+            mailFirstChar() {
+                if (!this.selectedMail.name) return 'A';
+                return this.firstChar = this.selectedMail.name.charAt(0);
+            },
+        },
+        watch: {
+            '$route'() {
+                this.mailListItemId = this.$route.params.id;
+                this.selectedMail = this.mails.find(mail => mail._id === this.mailListItemId);
+            }
+        },
+        methods: {
+            replayTo(){
+
+            },
             dateComputed(time) {
                 var date = new Date(time);
                 var hour = date.getHours()
                 var mins = date.getMinutes()
-                var day = date.getDay()
-                var month = date.getMonth()
+                var day = date.getDate()
+                var month = date.getMonth()+1
                 var year = date.getFullYear()
                 return this.date = day + '/' + month + '/' + year + ' at ' + hour + ':' + mins;
             }
@@ -88,6 +101,7 @@
                 mails: [],
                 mailListItemId: this.$route.params.id,
                 noMailSelected: false,
+                firstChar: '',
                 selectedMail: {},
             }
         }
@@ -132,7 +146,8 @@
         -webkit-box-align: center;
         -ms-flex-align: center;
     }
-    .replay-logo{
+
+    .replay-logo {
         justify-self: start;
         color: #ffffff;
         margin-left: 22px;
@@ -146,7 +161,7 @@
         align-self: center;
     }
 
-    .logo{
+    .logo {
         justify-self: start;
         color: #ffffff;
         margin-left: 22px;
@@ -200,7 +215,9 @@
         flex-direction: column;
         word-wrap: break-word;
         justify-content: space-between;
-        box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2),
+        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 3px 1px -2px rgba(0, 0, 0, 0.12);
     }
 
     .mail-item-card > * {

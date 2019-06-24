@@ -3,7 +3,8 @@
     <div  class="preview-mails emails-container">
         <div class="mail-container">
             <div v-for="mail in this.mails" :key="mail.id">
-            <mail-list-item v-on:update="updateRead"
+            <mail-list-item class="anim"
+                            v-on:update="updateRead"
                             v-on:delete="deleteMail"
                             v-bind:mail="mail">
 
@@ -39,7 +40,20 @@
         width: 0;
         background: transparent;
     }
+    .anim{
+        animation: slide-up .25s linear;
+    }
 
+    @keyframes slide-up {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
     .emails-container {
         font-size: 1.8rem;
         overflow: auto;

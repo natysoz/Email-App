@@ -126,6 +126,16 @@
         box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2),
         0 2px 2px 0 rgba(0, 0, 0, 0.14),
         0 3px 1px -2px rgba(0, 0, 0, 0.12);
+        animation: enter-screen 0.35s ease-in;
+        overflow: hidden;
+    }
+    @keyframes enter-screen {
+        0%{
+            opacity: 0;
+        }
+        100%{
+            opacity: 1;
+        }
     }
 
 </style>

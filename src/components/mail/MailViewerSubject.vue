@@ -123,6 +123,19 @@
         width: 50%;
         background: #303030;
         border: none;
+        animation: scale-up .25s linear;
+    }
+    @keyframes scale-up {
+
+        0%{
+            width: 0%;
+
+        }
+        100%{
+            width: 50%;
+
+        }
+
     }
     .input-clr{
         text-align: left;
@@ -164,6 +177,17 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        animation: slide-up 0.3s ease-out;
+    }
+    @keyframes slide-up {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .mail-title {

@@ -112,11 +112,24 @@
         height: 90px;
         grid-template-columns: 1fr 3fr 0.35fr;
         grid-template-rows: 1fr;
+        animation: slide-up .25s linear;
+
     }
 
     .mail-logo:hover {
         cursor: pointer;
         background-color: #303030;
+    }
+
+    @keyframes slide-up {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .mail-info {

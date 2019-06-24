@@ -73,7 +73,20 @@
 
     .container{
         width: 100%;
+        animation: slide-up 0.3s ease-out;
     }
+    
+    @keyframes slide-up {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
     .width {
         width: 90%;
     }

@@ -6,6 +6,8 @@ export default {
     pushNewMail,
     deleteMailByID,
     updateMailStatus,
+    deletePostByID,
+    pushPostByID
 }
 
 import storageService from './storage-services';
@@ -55,10 +57,45 @@ function deleteMailByID(mailID) {
         .then(mails => {
             var emailIdx = mails.findIndex(email => email._id === mailID);
             gMails.splice(emailIdx, 1);
-            //console.log('to delete ',mailID,'Found idx of this ID',emailIdx);
             return storageService.saveToStorage('mails', gMails);
         });
 }
+
+function deletePostByID(mailID,postID){
+    return storageService.loadFromStorage('mails')
+        .then(mails => {
+            var mailIdx = mails.findIndex(email => email._id === mailID);
+            var postIdx = mails[mailIdx].posts.findIndex(post=>post._id===postID);
+            gMails[mailIdx].posts.splice(postIdx,1);
+            return storageService.saveToStorage('mails', gMails);
+        });
+}
+
+function pushPostByID(mailID,msg){
+    return storageService.loadFromStorage('mails')
+        .then(mails => {
+            var mailIdx = mails.findIndex(email => email._id === mailID);
+            gMails[mailIdx].posts.push(
+                {
+                    "_id": storageService.createMailRandomID(24),
+                    "timestamp": Date.now(),
+                    "subject": "Ut ipsum nostrud dolore tempor adipisicing proident quis veniam minim cupidatat esse.",
+                    "body": msg,
+                    "name": "Candice Reid",
+                    "sendto": "natysoz@gmail.com",
+                    "sentfrom": "candicereid@aquafire.com",
+                    "isInbox": true,
+                    "isRead": true,
+                    "isSent": false,
+                    "isDone": true,
+                    "isImportant": true,
+                    "isDeleted": true
+                }
+            );
+            return storageService.saveToStorage('mails', gMails);
+        });
+}
+
 
 
 function pushNewMail(mail){
@@ -82,7 +119,7 @@ function createNewMail(mail) {
         "isSent": true,
         "isDone": false,
         "isDeleted": false,
-        "replays": []
+        "posts": []
     }
 }
 
@@ -102,7 +139,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb2757e12deda7758a",
                    "timestamp": 1391564431110,
@@ -164,7 +201,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb033fb89d6ffaac6d",
                    "timestamp": 1410027833570,
@@ -241,7 +278,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb05f3bba61aca09a6",
                    "timestamp": 1438749664366,
@@ -318,7 +355,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebf6765e476924887e",
                    "timestamp": 1495450617703,
@@ -350,7 +387,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb5dc3ae345e770ce2",
                    "timestamp": 1519017007423,
@@ -412,7 +449,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebf4f95c7a3f0ec439",
                    "timestamp": 1404742533419,
@@ -519,7 +556,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebe3222327cca806fc",
                    "timestamp": 1511815763971,
@@ -641,7 +678,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb62af37cdb0ea0c7c",
                    "timestamp": 1459922577784,
@@ -718,7 +755,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb6d561af2dbfd0f56",
                    "timestamp": 1538668000982,
@@ -780,7 +817,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb9b3850b2fc677f46",
                    "timestamp": 1488544684507,
@@ -887,7 +924,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebd81ccf3caf011e98",
                    "timestamp": 1393609682919,
@@ -964,7 +1001,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebf79c4a928be43012",
                    "timestamp": 1408298417603,
@@ -1011,7 +1048,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebdd7db73b67dcf1e6",
                    "timestamp": 1541531032525,
@@ -1088,7 +1125,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb1e5c92419b9a456e",
                    "timestamp": 1559153050581,
@@ -1195,7 +1232,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebf4d05f1c3598ac5c",
                    "timestamp": 1551403280716,
@@ -1317,7 +1354,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb512fb99902617866",
                    "timestamp": 1461056266380,
@@ -1409,7 +1446,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebbe131a1b423e1080",
                    "timestamp": 1541004846698,
@@ -1501,7 +1538,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb6cf2760174b06530",
                    "timestamp": 1463044232361,
@@ -1608,7 +1645,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb842c3c724d3a53a6",
                    "timestamp": 1512883110407,
@@ -1730,7 +1767,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb228325be067b1b2e",
                    "timestamp": 1498338158951,
@@ -1837,7 +1874,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebf04d6efa289d587a",
                    "timestamp": 1512335519878,
@@ -1944,7 +1981,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb7c7330d574bdd931",
                    "timestamp": 1390375404732,
@@ -1976,7 +2013,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb946f46c96a58641f",
                    "timestamp": 1539872748287,
@@ -2038,7 +2075,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb096c008a1d341497",
                    "timestamp": 1407895184501,
@@ -2085,7 +2122,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb6721cf10dc964969",
                    "timestamp": 1542795013337,
@@ -2192,7 +2229,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebde61ec7cb214768e",
                    "timestamp": 1390171169015,
@@ -2224,7 +2261,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebaf4b1804daec6f70",
                    "timestamp": 1463491785315,
@@ -2271,7 +2308,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebd2bdd982802457fa",
                    "timestamp": 1520566963785,
@@ -2333,7 +2370,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebf412fb8303f7903e",
                    "timestamp": 1434860928355,
@@ -2380,7 +2417,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb880a0f4403041535",
                    "timestamp": 1558648825772,
@@ -2472,7 +2509,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb7706cc8dc91edd12",
                    "timestamp": 1479680997588,
@@ -2564,7 +2601,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eba80b1a7f67119c45",
                    "timestamp": 1405197679139,
@@ -2671,7 +2708,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebbeedbdc106f7b32c",
                    "timestamp": 1403416753300,
@@ -2703,7 +2740,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebb4c571d3b747f49a",
                    "timestamp": 1444446329338,
@@ -2780,7 +2817,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb53defca4f854cf0d",
                    "timestamp": 1517027173146,
@@ -2812,7 +2849,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebf9af184b87eeb944",
                    "timestamp": 1451376083491,
@@ -2844,7 +2881,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb4d3b8e080191ed61",
                    "timestamp": 1451275720269,
@@ -2936,7 +2973,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb1525e8cbac7ac4f3",
                    "timestamp": 1436200183928,
@@ -2998,7 +3035,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebb267f1548b8b59ff",
                    "timestamp": 1463617097222,
@@ -3060,7 +3097,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebaac95bd777071888",
                    "timestamp": 1557373289877,
@@ -3092,7 +3129,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eba4b55c4aa58f69e5",
                    "timestamp": 1437836407189,
@@ -3169,7 +3206,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb93eee4f151d91064",
                    "timestamp": 1419223570582,
@@ -3216,7 +3253,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebdcfecc72320cd755",
                    "timestamp": 1545067307082,
@@ -3278,7 +3315,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb5b130e33e7c8f826",
                    "timestamp": 1408819407059,
@@ -3355,7 +3392,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb87dcaa019df0129d",
                    "timestamp": 1530404317192,
@@ -3462,7 +3499,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb34785fda916c5aba",
                    "timestamp": 1493857979746,
@@ -3539,7 +3576,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb56385f5d4e45b44e",
                    "timestamp": 1434948790263,
@@ -3631,7 +3668,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eba3cdc90886779b34",
                    "timestamp": 1546819426925,
@@ -3753,7 +3790,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebe34372f4792bfc36",
                    "timestamp": 1452040751519,
@@ -3800,7 +3837,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eba729f547ea7e6400",
                    "timestamp": 1475223079718,
@@ -3862,7 +3899,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb55809ca9a9a86455",
                    "timestamp": 1557263413986,
@@ -3924,7 +3961,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebfbb65afd46ebb7e2",
                    "timestamp": 1424301910506,
@@ -4046,7 +4083,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb5807b374754d2ad7",
                    "timestamp": 1440741882243,
@@ -4078,7 +4115,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebb5c926e84ae1aa8b",
                    "timestamp": 1454114993525,
@@ -4110,7 +4147,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebf432afbd7b5d3b11",
                    "timestamp": 1532963731368,
@@ -4172,7 +4209,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb48925c163492e60d",
                    "timestamp": 1410907549319,
@@ -4264,7 +4301,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb925e11a6faced9c0",
                    "timestamp": 1502722306906,
@@ -4326,7 +4363,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb1eca311646ce9911",
                    "timestamp": 1530283775553,
@@ -4373,7 +4410,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb5ebaf8e643793355",
                    "timestamp": 1468030126634,
@@ -4405,7 +4442,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb7385c17e65482e19",
                    "timestamp": 1394736847253,
@@ -4527,7 +4564,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb8fa80b739e77933e",
                    "timestamp": 1465782015586,
@@ -4619,7 +4656,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb28fac9eaf51d42c3",
                    "timestamp": 1425139448838,
@@ -4696,7 +4733,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebb623ae4a3d0cede8",
                    "timestamp": 1509411452315,
@@ -4818,7 +4855,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebb979dab9a3028e3c",
                    "timestamp": 1426126460006,
@@ -4910,7 +4947,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebbf36086f92c03ba2",
                    "timestamp": 1552885703861,
@@ -5002,7 +5039,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb1fda198f8bf249ac",
                    "timestamp": 1559117314242,
@@ -5064,7 +5101,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebbaf17a8ce27dc766",
                    "timestamp": 1537266553557,
@@ -5126,7 +5163,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebec2ef90ff17eda64",
                    "timestamp": 1389591955061,
@@ -5203,7 +5240,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebf4c6cc0909eea56a",
                    "timestamp": 1508217082253,
@@ -5280,7 +5317,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb3f08b0f8f2427261",
                    "timestamp": 1540397565912,
@@ -5372,7 +5409,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb229fe9e04ee3da30",
                    "timestamp": 1497441911829,
@@ -5464,7 +5501,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb10ca23fb8b0fe29e",
                    "timestamp": 1427348023123,
@@ -5511,7 +5548,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebadac19036a5c6866",
                    "timestamp": 1528910013594,
@@ -5618,7 +5655,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb7d0f60a4e7f15a45",
                    "timestamp": 1522784843221,
@@ -5725,7 +5762,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb00f331142e551410",
                    "timestamp": 1555243662157,
@@ -5847,7 +5884,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebd845667ea01fbb92",
                    "timestamp": 1435923010601,
@@ -5969,7 +6006,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb7f85dc84d8e8d6ae",
                    "timestamp": 1405825652417,
@@ -6031,7 +6068,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb7709dbe18477b2bd",
                    "timestamp": 1440812192384,
@@ -6123,7 +6160,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb568adaf105f8a250",
                    "timestamp": 1413829844259,
@@ -6185,7 +6222,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebe2b22585a6fa25ea",
                    "timestamp": 1408406360380,
@@ -6247,7 +6284,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebb1c9c7f95ceb2a11",
                    "timestamp": 1442540365928,
@@ -6369,7 +6406,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb7bcc3336aa74399a",
                    "timestamp": 1489159202329,
@@ -6476,7 +6513,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb1d1fe59b57101528",
                    "timestamp": 1488394138620,
@@ -6523,7 +6560,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb1241982d18970368",
                    "timestamp": 1477570458025,
@@ -6555,7 +6592,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebe89f82c1fb956665",
                    "timestamp": 1388705243212,
@@ -6587,7 +6624,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb57277c3ab9842c86",
                    "timestamp": 1468663430825,
@@ -6679,7 +6716,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb4181d978e3d0d53b",
                    "timestamp": 1419191077851,
@@ -6801,7 +6838,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebb5f6e462ffd9a33c",
                    "timestamp": 1551724640918,
@@ -6908,7 +6945,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebe5a5b5a7b2c0b496",
                    "timestamp": 1422826509914,
@@ -7030,7 +7067,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebe10370f078636915",
                    "timestamp": 1537371893696,
@@ -7077,7 +7114,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebfa7eb898d25a6dde",
                    "timestamp": 1557743597876,
@@ -7109,7 +7146,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebdde9c7f5c694f7d9",
                    "timestamp": 1469941108596,
@@ -7156,7 +7193,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb152c2e7e57034efb",
                    "timestamp": 1483931107024,
@@ -7203,7 +7240,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb4a7b922e272c5a55",
                    "timestamp": 1428249937829,
@@ -7235,7 +7272,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebe79199a6f72c61dd",
                    "timestamp": 1436071351400,
@@ -7327,7 +7364,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb511c608822f25af0",
                    "timestamp": 1471413525048,
@@ -7434,7 +7471,7 @@ function createFakeMails() {
            "isDone": false,
            "isImportant": true,
            "isDeleted": false,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb422b7661f427f80d",
                    "timestamp": 1421149675900,
@@ -7526,7 +7563,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb89dae5a63dda3aab",
                    "timestamp": 1525218865568,
@@ -7648,7 +7685,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": true,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0ebcd9acfe31a8c9f9a",
                    "timestamp": 1559298879540,
@@ -7740,7 +7777,7 @@ function createFakeMails() {
            "isDone": true,
            "isImportant": false,
            "isDeleted": true,
-           "replays": [
+           "posts": [
                {
                    "_id": "5d0ff0eb08920092fe5f1d91",
                    "timestamp": 1540813644992,

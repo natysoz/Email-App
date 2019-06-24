@@ -8,7 +8,10 @@
                        :mails="filteredMails"/>
             <mail-new-button v-on:create="openNewMail"/>
             <mail-compose v-on:send="sendMailAndClose" v-on:close="closeNewMail" v-if="createNewMailState"/>
-            <router-view v-if="!createNewMailState"/>
+            <router-view v-bind:emails="mails"
+                         v-on:deletePost="deletePost"
+                         v-on:pushPost="pushPost"
+                         v-if="!createNewMailState"/>
             <mail-empty v-if="!createNewMailState && !readMode"/>
         </div>
     </div>
@@ -25,13 +28,10 @@
 
     export default {
         name: "mailApp",
-        props:['filter'],
+        props: ['filter'],
         watch: {
             filter(searchTerm) {
                 this.search = searchTerm;
-            },
-            mails(){
-             return 1;
             },
         },
         data() {
@@ -57,8 +57,8 @@
                 });
 
         },
-            computed:{
-                filteredMails() {
+        computed: {
+            filteredMails() {
                 if (!this.mails) return;
                 return this.mails.filter(mail => {
                     if (this.selectedTab === 'inbox' || this.selectedTab === 'all') {
@@ -82,17 +82,35 @@
                         this.$router.push('/dashboard/mail/inbox/');
                     }
                 });
-         },
+            },
         },
         methods: {
-            updateMailReadStatus(mailID){
+            pushPost(mailId,msg){
+                mailService.pushPostByID(mailId,msg)
+                    .then(() => {
+                        mailService.query()
+                            .then(mails => {
+                                this.mails = mails;
+                            });
+                    })
+            },
+            deletePost(mailID, postID) {
+                mailService.deletePostByID(mailID, postID)
+                    .then(() => {
+                        mailService.query()
+                            .then(mails => {
+                                this.mails = mails;
+                            });
+                    })
+            },
+            updateMailReadStatus(mailID) {
                 mailService.updateMailStatus(mailID)
-                  .then(() => {
-                    mailService.query()
-                        .then(mails => {
-                            this.mails = mails;
-                        });
-                })
+                    .then(() => {
+                        mailService.query()
+                            .then(mails => {
+                                this.mails = mails;
+                            });
+                    })
             },
             requestDeleteMail(mailID) {
                 mailService.deleteMailByID(mailID)

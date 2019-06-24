@@ -3,7 +3,11 @@
     <div  class="preview-mails emails-container">
         <div class="mail-container">
             <div v-for="mail in this.mails" :key="mail.id">
-            <mail-list-item v-on:update="updateRead" v-on:delete="deleteMail"  v-bind:mail="mail"></mail-list-item>
+            <mail-list-item v-on:update="updateRead"
+                            v-on:delete="deleteMail"
+                            v-bind:mail="mail">
+
+            </mail-list-item>
             </div>
 
         </div>

@@ -76,7 +76,7 @@
     }
 
     .unread {
-        background-color: #03a9f41c;
+        background-color: rgba(3, 169, 244, 0.29);
         font-weight: 900;
         color: #f6f6f6;
     }
